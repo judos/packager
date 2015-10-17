@@ -21,7 +21,7 @@ data:extend({
       module_slots = 0
     },
 		collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
-    selection_box = {{-0.8, -1}, {0.8, 1}},
+    selection_box = {{-1, -1}, {1, 1}},
 		fast_replaceable_group = "packager",
 		crafting_categories = {"packager-pack"},
     result_inventory_size = 1,
@@ -48,33 +48,14 @@ data:extend({
 		-- Visuals
 		icon = "__packager__/graphics/icons/packager.png",
     corpse = "medium-remnants",
-    animation =
-    {
-      filename = "__base__/graphics/entity/stone-furnace/stone-furnace.png",
-      priority = "extra-high",
-      width = 81,
-      height = 64,
-      frame_count = 1,
-      shift = {0.5, 0.05 }
-    },
-    working_visualisations =
-    {
-      {
-        north_position = {0.0, 0.0},
-        east_position = {0.0, 0.0},
-        south_position = {0.0, 0.0},
-        west_position = {0.0, 0.0},
-        animation =
-        {
-          filename = "__base__/graphics/entity/stone-furnace/stone-furnace-fire.png",
-          priority = "extra-high",
-          width = 23,
-          height = 27,
-          frame_count = 12,
-          shift = { 0.078125, 0.5234375}
-        },
-        light = {intensity = 1, size = 1}
-      }
+		animation = {
+      filename = "__packager__/graphics/entity/packager/packager.png",
+      priority = "high",
+      width = 75,
+      height = 66,
+      frame_count = 32,
+      line_length = 8,
+      shift = {0.25, -0.04}
     },
   },
 })
