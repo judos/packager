@@ -15,3 +15,6 @@ Details:
 Planned:
 - Iron, Steel boxes for more items and better storage
 - Pack more different types of items
+
+Download statistics:
+- http://www.somsubhra.com/github-release-stats/?username=judos&repository=packager
