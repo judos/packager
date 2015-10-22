@@ -1,0 +1,5 @@
+0.1.2
+
+- Disabled copper cable boxes due to the issue #1 with the displayed raw ressource amount
+- Packager has faster crafting speed
+- Stone, Coal, Plastic, Mixed Iron& Copper boxes

@@ -1,0 +1,6 @@
+packager:
+- Wood, Iron gears, Electronic circuit boxes
+
+neat logistics:
+- input multiplier: 5x (abhängig von der zeit des rezepts)
+- output multiplier: per item ?

@@ -26,7 +26,7 @@ data:extend({
 		crafting_categories = {"packager-pack"},
     result_inventory_size = 1,
     energy_usage = "40kW",
-    crafting_speed = 0.5,
+    crafting_speed = 1,
     ingredient_count = 2,
     energy_source = {
       type = "electric",
