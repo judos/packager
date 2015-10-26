@@ -4,7 +4,7 @@ data:extend(
     type = "item-group",
     name = "packaging",
     order = "z",
-		inventory_order = "z",
+		inventory_order = "z1",
     icon = "__packager__/graphics/icons/iron-ore-box.png"
   },
 	{
@@ -30,5 +30,5 @@ data:extend(
     name = "packaging_others",
     group = "packaging",
     order = "12",
-  }
+  },
 })

@@ -23,7 +23,7 @@ data:extend({
 		collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
     selection_box = {{-1, -1}, {1, 1}},
 		fast_replaceable_group = "packager",
-		crafting_categories = {"packager-pack"},
+		crafting_categories = {"packager-pack","packager-advanced"},
     result_inventory_size = 1,
     energy_usage = "40kW",
     crafting_speed = 1,

@@ -30,6 +30,9 @@ item_addBox("stone")
 item_addBox("coal")
 item_addBox("plastic","plastic-bar")
 
+item_addBox("iron-ore",nil,true) --container version
+item_addBox("copper-ore",nil,true) --container version
+
 setSubgroup("packaging_plates")
 item_addBox("iron","iron-plate")
 item_addBox("copper","copper-plate")

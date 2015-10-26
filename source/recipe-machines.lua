@@ -15,7 +15,7 @@ data:extend(
   },
 	{
     type = "recipe",
-    name = "container",
+    name = "container1",
 		category = "crafting",
 		subgroup = "packaging_machines",
     energy_required = 1,
@@ -28,7 +28,7 @@ data:extend(
   },
 	{
     type = "recipe",
-    name = "container",
+    name = "container2",
 		category = "crafting",
 		subgroup = "packaging_machines",
     energy_required = 1,
