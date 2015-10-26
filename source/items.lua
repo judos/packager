@@ -1,4 +1,3 @@
-
 data:extend(
 {
 	{
@@ -24,18 +23,18 @@ data:extend(
 	},
 })
 
-item_setSubgroup("packaging_raw")
+setSubgroup("packaging_raw")
 item_addBox("iron-ore")
 item_addBox("copper-ore")
 item_addBox("stone")
 item_addBox("coal")
 item_addBox("plastic","plastic-bar")
 
-item_setSubgroup("packaging_plates")
+setSubgroup("packaging_plates")
 item_addBox("iron","iron-plate")
 item_addBox("copper","copper-plate")
 item_addBox("steel","steel-plate")
 
-item_setSubgroup("packaging_others")
+setSubgroup("packaging_others")
 --item_addBox("cable","copper-cable") -- Deactivated due to problems with calculation of raw ressources
 item_addBox("mixed-plates","iron-plate")

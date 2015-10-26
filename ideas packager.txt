@@ -1,4 +1,5 @@
 packager:
+- Container tier
 - belt packager (can be upgraded to faster packager)
 
 x Wood, Iron gears, Electronic circuit, copper-cable, mixed boxes

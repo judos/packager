@@ -14,6 +14,6 @@ end
 function chestStack(itemName,storageGain,chestSize)
 	local stack = data.raw["item"][itemName].stack_size
 	local newStack = stack * storageGain
-	local chestStack = round(newStack / chestSize)
+	local chestStack = math.ceil(newStack / chestSize)
 	return chestStack
 end

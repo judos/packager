@@ -8,7 +8,6 @@ require("items")
 require("entity")
 
 require("recipe-machines")
-require("recipe-raw")
-require("recipe-plates")
+require("recipe")
 require("recipe-others")
 

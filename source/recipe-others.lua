@@ -4,36 +4,6 @@ data:extend({
 	--[[
 	{
 		type = "recipe",
-		name = "cable-pack",
-		icon = "__packager__/graphics/icons/cable-pack.png",
-		category = "packager-pack",
-		subgroup = "packaging_others",
-		energy_required = 0.5,
-		ingredients = {{"copper-cable",woodChestSize},{"wooden-chest",1}},
-		result = "cable-box",
-		result_count = 1,
-		order = "a1",
-		enabled = "true"
-	},
-	{
-		type = "recipe",
-		name = "cable-unpack",
-		icon = "__packager__/graphics/icons/cable-unpack.png",
-		category = "packager-pack",
-		subgroup = "packaging_others",
-		energy_required = 0.5,
-		ingredients = {{"cable-box",1}},
-		results= {
-      {type="item", name="copper-cable", amount=woodChestSize},
-      {type="item", name="wooden-chest", amount=1}
-    },
-		order = "a2",
-		enabled = "true"
-	},
-	]]--
-	--[[
-	{
-		type = "recipe",
 		name = "mixed-plates-pack",
 		icon = "__packager__/graphics/icons/mixed-plates-pack.png",
 		category = "packager-pack",

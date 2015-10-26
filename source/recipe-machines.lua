@@ -26,5 +26,18 @@ data:extend(
 		order = "01",
 		enabled = "true",
   },
+	{
+    type = "recipe",
+    name = "container",
+		category = "crafting",
+		subgroup = "packaging_machines",
+    energy_required = 1,
+    ingredients = {{"iron-chest",8},{"steel-plate",10}},
+    results = {
+			{type="item", name="container", amount=1}
+		},
+		order = "02",
+		enabled = "true",
+  },
 	
 })
