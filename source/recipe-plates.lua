@@ -1,19 +1,6 @@
 data:extend(
 {
 	{
-    type = "recipe",
-    name = "packager",
-		category = "crafting",
-		subgroup = "packaging_machines",
-    energy_required = 1,
-    ingredients = {{"iron-plate",10},{"copper-cable",10},{"iron-gear-wheel",5}},
-    results = {
-			{type="item", name="packager", amount=1}
-		},
-		order = "00",
-		enabled = "true",
-  },
-	{
 		type = "recipe",
 		name = "iron-pack",
 		icon = "__packager__/graphics/icons/iron-pack.png",

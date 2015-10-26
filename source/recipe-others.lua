@@ -31,6 +31,7 @@ data:extend({
 		enabled = "true"
 	},
 	]]--
+	--[[
 	{
 		type = "recipe",
 		name = "mixed-plates-pack",
@@ -60,5 +61,5 @@ data:extend({
 		order = "b2",
 		enabled = "true"
 	},
-	
+	]]--
 })

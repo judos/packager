@@ -1,5 +1,8 @@
 packager:
-- Wood, Iron gears, Electronic circuit boxes
+- belt packager (can be upgraded to faster packager)
+
+x Wood, Iron gears, Electronic circuit, copper-cable, mixed boxes
+ -> This is blocked due to raw ressources calculation of factorio (crafting recipes are screwed up then)
 
 neat logistics:
 - input multiplier: 5x (abhängig von der zeit des rezepts)
