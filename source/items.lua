@@ -1,5 +1,18 @@
 data:extend(
 {
+	--[[
+	{
+		type = "item",
+		name = "belt-packager",
+		icon = "__packager__/graphics/icons/packager.png",
+		place_result = "belt-packager",
+		flags = {"goes-to-quickbar"},
+    subgroup = "packaging_machines",
+		category = "crafting",
+		order = "0",
+		stack_size = 50,
+	},
+	]]--
 	{
 		type = "item",
 		name = "packager",
@@ -8,7 +21,7 @@ data:extend(
 		flags = {"goes-to-quickbar"},
     subgroup = "packaging_machines",
 		category = "crafting",
-		order = "0",
+		order = "1",
 		stack_size = 50,
 	},
 	{
@@ -18,7 +31,7 @@ data:extend(
 		flags = {"goes-to-main-inventory"},
     subgroup = "packaging_machines",
 		category = "crafting",
-		order = "1",
+		order = "2",
 		stack_size = containerStack("iron-ore"),
 	},
 })

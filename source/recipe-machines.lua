@@ -1,5 +1,20 @@
 data:extend(
 {
+	--[[
+	{
+    type = "recipe",
+    name = "belt-packager",
+		category = "crafting",
+		subgroup = "packaging_machines",
+    energy_required = 1,
+    ingredients = {{"iron-plate",10},{"copper-cable",10},{"iron-gear-wheel",5}},
+    results = {
+			{type="item", name="belt-packager", amount=1}
+		},
+		order = "0",
+		enabled = "true",
+  },
+	]]--
 	{
     type = "recipe",
     name = "packager",
@@ -10,7 +25,7 @@ data:extend(
     results = {
 			{type="item", name="packager", amount=1}
 		},
-		order = "00",
+		order = "1",
 		enabled = "true",
   },
 	{
@@ -23,7 +38,7 @@ data:extend(
     results = {
 			{type="item", name="container", amount=1}
 		},
-		order = "01",
+		order = "2",
 		enabled = "true",
   },
 	{
@@ -36,8 +51,7 @@ data:extend(
     results = {
 			{type="item", name="container", amount=1}
 		},
-		order = "02",
+		order = "3",
 		enabled = "true",
   },
-	
 })
