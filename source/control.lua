@@ -2,15 +2,20 @@ require "defines"
 require "config"
 require "basic-lua-extensions"
 
+local delayOff = 60 -- when the packager doesn't run the next update is triggered X ticks later
+local regularUpdate = 10 -- when the packager is running
+
 local packagerName = "belt-packager"
-local next = next
+
 local north = defines.direction.north
 local east = defines.direction.east
 local south = defines.direction.south
 local west = defines.direction.west
 local transport_line = defines.transport_line
 
-
+---------------------------------------------------
+-- Loading
+---------------------------------------------------
 script.on_init(function()
 	onLoad()
 end)
@@ -24,30 +29,42 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
-	if not global.packagers then global.packagers = {} end
+	if not global.packagerInputBelts then global.packagerInputBelts = {} end
 	if not global.schedule then global.schedule = {} end
 end
 
+---------------------------------------------------
+-- Tick
+---------------------------------------------------
 script.on_event(defines.events.on_tick, function(event)
   -- if no updates are scheduled return
+	
 	if type(global.schedule[game.tick]) ~= "table" then
 		return
 	end
-	for index,entity in ipairs(global.schedule[game.tick]) do
+	for idEntity,entity in pairs(global.schedule[game.tick]) do
 		if entity.valid then 
-			local nextUpdateInXTicks, errorMessage = runPackagerInstructions(entity)
+			local nextUpdateInXTicks, errorMessage = runPackagerInstructions(idEntity, entity)
 			if errorMessage ~= nil then
 				debug("Problem with packager at " .. entity.position.x .. ", " ..entity.position.y .. ": "..errorMessage)
 			end
 			if nextUpdateInXTicks ~= nil then
 				scheduleAdd(entity, game.tick + nextUpdateInXTicks)
+			else
+				-- if no more update is scheduled, remove it from memory
+				removePackager(idEntity)
 			end
+		else
+			-- if entity was removed, remove it from memory
+			removePackager(idEntity)
 		end
 	end
 	global.schedule[game.tick] = nil
 end)
 
+---------------------------------------------------
 -- Building packagers
+---------------------------------------------------
 script.on_event(defines.events.on_built_entity, function(event)
 	if event.created_entity.name == packagerName then
 		packagerBuilt(event.created_entity)
@@ -59,24 +76,43 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 	end
 end)
 
+function packagerBuilt(entity)
+	debug("packager built and added for update tick: "..game.tick)
+	updateBeltSetup(entity)
+	scheduleAdd(entity, game.tick + 10)
+end
+
+function updateBeltSetup(entity)
+	local beltEntities = findInputsOutputs(entity)
+	global.packagerInputBelts[idOfEntity(entity)] = beltEntities
+end
+
+---------------------------------------------------
 -- Removal of packagers
+---------------------------------------------------
+-- triggered in tick() because no coordinate is passed for the following functions)
+--[[
 script.on_event(defines.events.on_player_mined_item, function(event)
 	if event.item_stack.name == packagerName then
-		packagerRemoved()
 	end
 end)
 script.on_event(defines.events.on_robot_mined, function(event)
 	if event.item_stack.name == packagerName then
-		packagerRemoved()
 	end
 end)
 script.on_event(defines.events.on_entity_died, function(event)
 	if event.item_stack.name == packagerName then
-		packagerRemoved()
 	end
 end)
+]]--
+function removePackager(idOfEntity)
+	global.packagerInputBelts[idOfEntity] = nil
+end
 
+
+---------------------------------------------------
 -- Utility methods
+---------------------------------------------------
 -- Adds new entry to the scheduling table
 function scheduleAdd(entity, nextTick)
 	if global.schedule[nextTick] == nil then
@@ -85,23 +121,8 @@ function scheduleAdd(entity, nextTick)
 	global.schedule[nextTick][idOfEntity(entity)] = entity
 end
 
-function packagerBuilt(entity)
-	local pos = {x = entity.position.x, y = entity.position.y}
-	local beltEntities = findInputsOutputs(entity)
-	global.packagers[idOfEntity(entity)] = beltEntities
-	scheduleAdd(entity, game.tick + 10)
-end
-
 function idOfEntity(entity)
 	return string.format("%d_%d", entity.position.x, entity.position.y)
-end
-
-function packagerRemoved()
-	for id,entity in ipairs(global.packagers) do
-		if not entity.valid then
-			global.packagers[id]=nil
-		end
-	end
 end
 
 function findInputsOutputs(entity) -- Find the input for the packager.
@@ -118,10 +139,10 @@ function findInputsOutputs(entity) -- Find the input for the packager.
 		{pos.x - 0.5, pos.y + 1.5}, -- south left
 	}
 	local valid_belt_directions = {
-		2,2, -- belt in the west, facing right
-		4,4, -- belt in the north, facing down
-		6,6, -- belt in the east, facing left
-		0,0, -- belt in the south, facing up
+		east, east,  -- belt in the west,  facing right
+		south,south, -- belt in the north, facing down
+		west, west,  -- belt in the east,  facing left
+		north,north, -- belt in the south, facing up
 	}
 	local resultBeltEntities = {}
 	for index,pointOfEntity in ipairs(beltscan_coords) do
@@ -136,54 +157,64 @@ end
 
 -- parameters: entity (the packager)
 -- return values: tickDelayForNextUpdate, errorMessage
-function runPackagerInstructions(entity)
+function runPackagerInstructions(idOfEntity, entity)
 	-- precondition: have a recipe with ingredients
-	if entity.recipe == nil then
-		return
+	local recipe = entity.recipe
+	if recipe == nil then -- recipe on packager must be selected
+		return delayOff,nil --"no recipe selected"
 	end
+	if #recipe.ingredients ~= 2 then --it must be a recipe where something is packed
+		return delayOff,nil --"not a pack recipe"
+	end
+	local inputItemName = recipe.ingredients[1].name
+	local stack = {name = inputItemName, count = 1}
 	
-	--[[
+	-- packager must have space in inventory
+	local packagerInventory = entity.get_inventory(defines.inventory.assembling_machine_input)
+	-- if not packagerInventory.can_insert(stack) then -- doesn't work in factorio 0.12.12 - 0.12.14
+	-- -> see this report: http://www.factorioforums.com/forum/viewtopic.php?f=7&t=17347&p=114954#p114954
+	--	return delayOff,"no storage space"
+	-- end
 	
-	local instructions = chest.instructions
-	local action_count = 0
+	-- no input belts
+	if #global.packagerInputBelts[idOfEntity] == 0 then
+		updateBeltSetup(entity)
+		return delayOff,nil --"no input belts"
+	end
+	local actions = 0
 	
-	for i,v in pairs(instructions) do
-		if v[2].valid == false then
-			return true, false
+	-- for all belts found around the packager
+	for index,belt in pairs(global.packagerInputBelts[idOfEntity]) do
+		if not belt.valid then -- belt was removed
+			updateBeltSetup(entity)
+			return delayOff,nil --"belt was removed"
 		end
 		
-		if v[1] == "output" and not chest.inventory.is_empty() then
-			local chest_contents = next(chest.inventory.get_contents())
-			local stack = {name = chest_contents, count = 1}
+		-- for both lines of the belt
+		local beltLines = {defines.transport_line.left_line,defines.transport_line.right_line}
+		for _,beltLine in pairs(beltLines) do
+			local transportLine = belt.get_transport_line(beltLine)
+			local content = transportLine.get_contents()
 			
-			if v[2].can_insert_at_back() then
-				v[2].insert_at_back(stack)
-				chest.inventory.remove(stack)
-				chest.battery.energy = chest.battery.energy - energy_per_action
-				action_count = action_count + 1
-			end
-		elseif v[1] == "input" then
-			local line_contents = next(v[2].get_contents())
-			
-			if line_contents ~= nil then
-				local stack = {name = line_contents, count = 1}
-				
-				if chest.inventory.can_insert(stack) then
-					chest.inventory.insert(stack)
-					v[2].remove_item(stack)
-					chest.battery.energy = chest.battery.energy - energy_per_action
-					action_count = action_count + 1
+			-- if the belt contains the required items
+			if content[inputItemName]~=nil and content[inputItemName]>0 then
+				local itemsPresent = packagerInventory.get_contents()[inputItemName]
+				if itemsPresent == nil or itemsPresent < game.item_prototypes[inputItemName].stack_size then
+					actions = actions + 1
+					local insertedItems = packagerInventory.insert(stack)
+					transportLine.remove_item{name=inputItemName,count=insertedItems}
+					if insertedItems == 0 then
+						return delayOff,"no more storage space"
+					end
+				else
+					return delayOff,nil --"storage space might overflow"
 				end
 			end
 		end
 	end
-	
-	if action_count == 0 then
-		return true, true
+	if actions > 0 then
+		return regularUpdate,nil
 	else
-		return false, true
+		return delayOff,nil --"no actions taken"
 	end
-	
-	]]--
-	return nil,"updateTick not implemented"
 end

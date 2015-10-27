@@ -1,6 +1,6 @@
 data:extend(
 {
-	--[[
+	
 	{
 		type = "item",
 		name = "belt-packager",
@@ -12,7 +12,7 @@ data:extend(
 		order = "0",
 		stack_size = 50,
 	},
-	]]--
+	
 	{
 		type = "item",
 		name = "packager",

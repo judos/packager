@@ -59,9 +59,9 @@ data:extend({
     },
   },
 })
---[[
+
 local beltPackager = deepcopy(data.raw["assembling-machine"]["packager"])
 beltPackager["name"]="belt-packager"
 beltPackager["minable"]["result"]="belt-packager"
+beltPackager["energy_usage"] = "80kW"
 data:extend({	beltPackager })
-]]--
