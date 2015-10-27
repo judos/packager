@@ -1,5 +1,4 @@
 require "defines"
-require "config"
 require "basic-lua-extensions"
 
 local delayOff = 60 -- when the packager doesn't run the next update is triggered X ticks later
