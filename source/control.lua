@@ -28,8 +28,15 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
-	if not global.packagerInputBelts then global.packagerInputBelts = {} end
-	if not global.schedule then global.schedule = {} end
+	debugp("onload"..serpent.block(global))
+	if not global.packagerInputBelts then
+		debugp("initialized global.packagerInputBelts")
+		global.packagerInputBelts = {}
+	end
+	if not global.schedule then
+		debugp("initialized global.schedule")
+		global.schedule = {}
+	end
 end
 
 ---------------------------------------------------

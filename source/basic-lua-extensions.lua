@@ -21,6 +21,12 @@ end
 -- DyTech source codes:
 --[[Debug Functions]]--
 debug_master = true -- Master switch for debugging, shows most things!
+
+function debugp(message)
+	if debug_master then
+		print(message)
+	end
+end
 function debug(message)
 	if debug_master then
 		if type(message) ~= "string" then
