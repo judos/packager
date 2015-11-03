@@ -2,7 +2,7 @@ require "defines"
 require "basic-lua-extensions"
 
 local delayOff = 60 -- when the packager doesn't run the next update is triggered X ticks later
-local regularUpdate = 10 -- when the packager is running
+local regularUpdate = 5 -- when the packager is running
 
 local packagerName = "belt-packager"
 
@@ -11,6 +11,11 @@ local east = defines.direction.east
 local south = defines.direction.south
 local west = defines.direction.west
 local transport_line = defines.transport_line
+
+-- global data stored and used:
+-- global.packagerInputBelts[idEntity] = { idEntity(belt), ... }
+-- global.schedule[tick] = { idEntity(beltPackager), ... }
+
 
 ---------------------------------------------------
 -- Loading
@@ -28,13 +33,19 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
-	debugp("onload"..serpent.block(global))
+	debug("onload"..serpent.block(global))
+	if not global.packagerVersion then
+		global.packagerVersion = "0.1.4"
+		global.packagerInputBelts = {}
+		global.schedule = {}
+		PlayerPrint("Migration: All old belt-packagers have to be replaced due to code changes.")
+	end
 	if not global.packagerInputBelts then
-		debugp("initialized global.packagerInputBelts")
+		debug("initialized global.packagerInputBelts")
 		global.packagerInputBelts = {}
 	end
 	if not global.schedule then
-		debugp("initialized global.schedule")
+		debug("initialized global.schedule")
 		global.schedule = {}
 	end
 end
@@ -48,8 +59,9 @@ script.on_event(defines.events.on_tick, function(event)
 	if type(global.schedule[game.tick]) ~= "table" then
 		return
 	end
-	for idEntity,entity in pairs(global.schedule[game.tick]) do
-		if entity.valid then 
+	for _,idEntity in pairs(global.schedule[game.tick]) do
+		entity = entityOfId(idEntity)
+		if entity.valid then
 			local nextUpdateInXTicks, errorMessage = runPackagerInstructions(idEntity, entity)
 			if errorMessage ~= nil then
 				debug("Problem with packager at " .. entity.position.x .. ", " ..entity.position.y .. ": "..errorMessage)
@@ -61,6 +73,7 @@ script.on_event(defines.events.on_tick, function(event)
 				removePackager(idEntity)
 			end
 		else
+			debug("packager is not valid!")
 			-- if entity was removed, remove it from memory
 			removePackager(idEntity)
 		end
@@ -89,8 +102,8 @@ function packagerBuilt(entity)
 end
 
 function updateBeltSetup(entity)
-	local beltEntities = findInputsOutputs(entity)
-	global.packagerInputBelts[idOfEntity(entity)] = beltEntities
+	local beltEntityIds = findInputBeltIds(entity)
+	global.packagerInputBelts[idOfEntity(entity)] = beltEntityIds
 end
 
 ---------------------------------------------------
@@ -124,14 +137,22 @@ function scheduleAdd(entity, nextTick)
 	if global.schedule[nextTick] == nil then
 		global.schedule[nextTick] = {}
 	end
-	global.schedule[nextTick][idOfEntity(entity)] = entity
+	table.insert(global.schedule[nextTick],idOfEntity(entity))
 end
 
 function idOfEntity(entity)
-	return string.format("%d_%d", entity.position.x, entity.position.y)
+	return string.format("%g_%g", entity.position.x, entity.position.y)
+end
+function entityOfId(id)
+	local position = split(id,"_")
+	local point = {tonumber(position[1]),tonumber(position[2])}
+	local entities = game.surfaces.nauvis.find_entities{point,point}
+	if entities == nil then return nil end
+	if #entities == 0 then return nil end
+	return entities[1]
 end
 
-function findInputsOutputs(entity) -- Find the input for the packager.
+function findInputBeltIds(entity) -- Find the input for the packager.
 	local pos = {x = entity.position.x, y = entity.position.y}
 	
 	local beltscan_coords = { -- Points to search for transport belts.
@@ -150,15 +171,15 @@ function findInputsOutputs(entity) -- Find the input for the packager.
 		west, west,  -- belt in the east,  facing left
 		north,north, -- belt in the south, facing up
 	}
-	local resultBeltEntities = {}
-	for index,pointOfEntity in ipairs(beltscan_coords) do
+	local resultBeltIds = {}
+	for index,pointOfEntity in pairs(beltscan_coords) do
 		--search for belt on one field
 		local belt = entity.surface.find_entities_filtered{area = {pointOfEntity,pointOfEntity}, type = "transport-belt"}
 		if belt[1] and belt[1].direction == valid_belt_directions[index] then
-			table.insert(resultBeltEntities,belt[1])
+			table.insert(resultBeltIds,idOfEntity(belt[1]))
 		end
 	end
-	return resultBeltEntities
+	return resultBeltIds
 end
 
 -- parameters: entity (the packager)
@@ -167,10 +188,10 @@ function runPackagerInstructions(idOfEntity, entity)
 	-- precondition: have a recipe with ingredients
 	local recipe = entity.recipe
 	if recipe == nil then -- recipe on packager must be selected
-		return delayOff,nil --"no recipe selected"
+		return delayOff,"no recipe selected"
 	end
 	if #recipe.ingredients ~= 2 then --it must be a recipe where something is packed
-		return delayOff,nil --"not a pack recipe"
+		return delayOff,"not a pack recipe"
 	end
 	local inputItemName = recipe.ingredients[1].name
 	local stack = {name = inputItemName, count = 1}
@@ -185,15 +206,16 @@ function runPackagerInstructions(idOfEntity, entity)
 	-- no input belts
 	if #global.packagerInputBelts[idOfEntity] == 0 then
 		updateBeltSetup(entity)
-		return delayOff,nil --"no input belts"
+		return delayOff,"no input belts"
 	end
 	local actions = 0
 	
 	-- for all belts found around the packager
-	for index,belt in pairs(global.packagerInputBelts[idOfEntity]) do
+	for _,beltId in pairs(global.packagerInputBelts[idOfEntity]) do
+		local belt = entityOfId(beltId)
 		if not belt.valid then -- belt was removed
 			updateBeltSetup(entity)
-			return delayOff,nil --"belt was removed"
+			return delayOff,"belt was removed"
 		end
 		
 		-- for both lines of the belt
@@ -213,7 +235,7 @@ function runPackagerInstructions(idOfEntity, entity)
 						return delayOff,"no more storage space"
 					end
 				else
-					return delayOff,nil --"storage space might overflow"
+					return delayOff,"storage space might overflow"
 				end
 			end
 		end
@@ -221,6 +243,6 @@ function runPackagerInstructions(idOfEntity, entity)
 	if actions > 0 then
 		return regularUpdate,nil
 	else
-		return delayOff,nil --"no actions taken"
+		return delayOff,"no actions taken"
 	end
 end

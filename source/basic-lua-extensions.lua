@@ -3,6 +3,14 @@ function round(num, idp)
   return math.floor(num * mult + 0.5) / mult
 end
 
+function split(s, delimiter)
+    result = {}
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match)
+    end
+    return result
+end
+
 function deepcopy(orig)
     local orig_type = type(orig)
     local copy
@@ -22,22 +30,23 @@ end
 --[[Debug Functions]]--
 debug_master = true -- Master switch for debugging, shows most things!
 
-function debugp(message)
-	if debug_master then
-		print(message)
-	end
-end
 function debug(message)
 	if debug_master then
 		if type(message) ~= "string" then
 			message = serpent.block(message)
 		end
-		PlayerPrint(message)
+		print(message)
 	end
 end
 
+local printIndex = 1
 function PlayerPrint(message)
+	if not game then
+		debug(message)
+		return
+	end
 	for _,player in pairs(game.players) do
-		player.print(message)
+		player.print(printIndex.." "..message)
+		printIndex = printIndex + 1
 	end
 end
