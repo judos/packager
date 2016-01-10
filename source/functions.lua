@@ -1,11 +1,8 @@
 
-local orderIndex
 local currentSubGroup
 -- parameters: subgroup name which is used for further items
--- also sets back the orderIndexs
 function setSubgroup(subGroupName)
 	currentSubGroup = subGroupName
-	orderIndex = 1
 end
 
 -- adds both recipes (pack and unpack for one wooden box)
@@ -14,6 +11,7 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 		ingredientName = recipeName
 	end
 	local chestName, category, itemAppendix, stackSize, timeNeeded
+	local subgroupName = currentSubGroup
 	if not containerTier then
 		chestName = "wooden-chest"
 		stackSize = woodChestSize
@@ -26,6 +24,7 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 		category = "packager-advanced"
 		itemAppendix = "container"
 		timeNeeded = 5
+		subgroupName = "packaging_container"
 	end
 	
 	data:extend({
@@ -34,12 +33,12 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 			name = recipeName.."-"..itemAppendix.."-pack",
 			icon = "__packager__/graphics/icons/"..recipeName.."-"..itemAppendix.."-pack.png",
 			category = category,
-			subgroup = currentSubGroup,
+			subgroup = subgroupName,
 			energy_required =timeNeeded,
 			ingredients = {{ingredientName,stackSize},{chestName,1}},
 			result = recipeName.."-"..itemAppendix,
 			result_count = 1,
-			order = "a"..string.format("%02d", orderIndex),
+			order = recipeName:sub(1,3).."1",
 			enabled = "true"
 		},
 		{
@@ -47,18 +46,17 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 			name = recipeName.."-"..itemAppendix.."-unpack",
 			icon = "__packager__/graphics/icons/"..recipeName.."-"..itemAppendix.."-unpack.png",
 			category = category,
-			subgroup = currentSubGroup,
+			subgroup = subgroupName,
 			energy_required = timeNeeded,
 			ingredients = {{recipeName.."-"..itemAppendix,1}},
 			results= {
 				{type="item", name=ingredientName, amount=stackSize},
 				{type="item", name=chestName, amount=1}
 			},
-			order = "a"..string.format("%02d", orderIndex+1),
+			order = recipeName:sub(1,3).."2",
 			enabled = "true"
 		},
 	})
-	orderIndex = orderIndex + 2
 end
 
 
@@ -83,9 +81,8 @@ function item_addBox(itemName,stackItemName,containerTier)
 			flags = {"goes-to-main-inventory"},
 			subgroup = currentSubGroup,
 			--category = "crafting", --Unknown property, what does it do?
-			order = "a"..string.format("%02d", orderIndex),
+			order = itemName:sub(1,3),
 			stack_size = stackSize
 		},
 	})
-	orderIndex = orderIndex+1
 end

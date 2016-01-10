@@ -21,14 +21,20 @@ data:extend(
   },
 	{
     type = "item-subgroup",
-    name = "packaging_plates",
+    name = "packaging_container",
     group = "packaging",
     order = "11",
   },
 	{
     type = "item-subgroup",
+    name = "packaging_plates",
+    group = "packaging",
+    order = "20",
+  },
+	{
+    type = "item-subgroup",
     name = "packaging_others",
     group = "packaging",
-    order = "12",
+    order = "30",
   },
 })

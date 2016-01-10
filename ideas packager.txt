@@ -13,7 +13,7 @@ packager:
 	- zinc ore / zinc plate
 	- nickel ore / nickel plate
 	- rutile ore / titanium plate
-	- bronze plate, brass plate, electrum plate, invar plate 
+	- bronze plate, brass plate, electrum plate, invar plate
 
 x Wood, Iron gears, Electronic circuit, copper-cable
  -> This is blocked due to raw ressources calculation of factorio (crafting recipes are screwed up then)

@@ -1,5 +1,7 @@
 0.2.0
 
+- Moved containers to separate item-group
+- Added bobsores in boxes
 - Belt-packager has differnet graphics for better visibility
 
 0.1.4
