@@ -63,5 +63,6 @@ data:extend({
 local beltPackager = deepcopy(data.raw["assembling-machine"]["packager"])
 beltPackager["name"]="belt-packager"
 beltPackager["minable"]["result"]="belt-packager"
+beltPackager["animation"]["filename"]="__packager__/graphics/entity/belt-packager/belt-packager.png"
 beltPackager["energy_usage"] = "80kW"
 data:extend({	beltPackager })

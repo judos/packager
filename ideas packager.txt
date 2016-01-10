@@ -1,10 +1,19 @@
 packager:
-- Container tier
-- belt packager (can be upgraded to faster packager)
+- bobs integration:
+  - galena / lead ore / lead plate
+	- tin ore / tin plate
+	- silver ore / silver plate
+	- quartz ore / glass
+	- resin / rubber
+	- gold ore / plate
+	- cobaltite, cobalt plate
+	- bauxite / aluminium plate
+	- tungsten ore / tungsten plate
+	- zinc ore / zinc plate
+	- nickel ore / nickel plate
+	- rutile ore / titanium plate
+	- bronze plate, brass plate, electrum plate, invar plate 
+	- unsorted gemstone ore
 
-x Wood, Iron gears, Electronic circuit, copper-cable, mixed boxes
+x Wood, Iron gears, Electronic circuit, copper-cable
  -> This is blocked due to raw ressources calculation of factorio (crafting recipes are screwed up then)
-
-neat logistics:
-- input multiplier: 5x (abhängig von der zeit des rezepts)
-- output multiplier: per item ?

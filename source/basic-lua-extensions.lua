@@ -28,7 +28,7 @@ end
 
 -- DyTech source codes:
 --[[Debug Functions]]--
-debug_master = true -- Master switch for debugging, shows most things!
+debug_master = false -- Master switch for debugging, shows most things!
 
 function debug(message)
 	if debug_master then
