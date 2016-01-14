@@ -1,11 +1,38 @@
 data:extend({
-	
-	-- Disabled due to the wrong raw ressources calculation in factorio 0.12.8
-	--[[
+--[[ Disabled because it causes issues with recipes
 	{
 		type = "recipe",
-		name = "mixed-plates-pack",
-		icon = "__packager__/graphics/icons/mixed-plates-pack.png",
+		name = "cable-box-pack",
+		icon = "__packager__/graphics/icons/cable-box-pack.png",
+		category = "packager-pack",
+		subgroup = "packaging_others",
+		energy_required = 0.5,
+		ingredients = {{"copper-cable",woodChestSize},{"wooden-chest",1}},
+		result = "cable-box",
+		result_count = 1,
+		order = "a1",
+		enabled = "true"
+	},
+	{
+		type = "recipe",
+		name = "cable-box-unpack",
+		icon = "__packager__/graphics/icons/cable-box-unpack.png",
+		category = "packager-pack",
+		subgroup = "packaging_others",
+		energy_required = 0.5,
+		ingredients = {{"cable-box",1}},
+		results= {
+      {type="item", name="copper-cable", amount=woodChestSize},
+      {type="item", name="wooden-chest", amount=1}
+    },
+		order = "a2",
+		enabled = "true"
+	},
+]]--
+	{
+		type = "recipe",
+		name = "mixed-plates-box-pack",
+		icon = "__packager__/graphics/icons/mixed-plates-box-pack.png",
 		category = "packager-pack",
 		subgroup = "packaging_others",
 		energy_required = 0.5,
@@ -17,8 +44,8 @@ data:extend({
 	},
 	{
 		type = "recipe",
-		name = "mixed-plates-unpack",
-		icon = "__packager__/graphics/icons/mixed-plates-unpack.png",
+		name = "mixed-plates-box-unpack",
+		icon = "__packager__/graphics/icons/mixed-plates-box-unpack.png",
 		category = "packager-pack",
 		subgroup = "packaging_others",
 		energy_required = 0.5,
@@ -31,5 +58,5 @@ data:extend({
 		order = "b2",
 		enabled = "true"
 	},
-	]]--
+	
 })

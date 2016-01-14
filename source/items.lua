@@ -52,5 +52,6 @@ item_addBox("copper","copper-plate")
 item_addBox("steel","steel-plate")
 
 setSubgroup("packaging_others")
---item_addBox("cable","copper-cable") -- Deactivated due to problems with calculation of raw ressources
---item_addBox("mixed-plates","iron-plate")
+-- Deactivated due to problems with calculation of raw ressources
+item_addBox("cable","copper-cable") 
+item_addBox("mixed-plates","iron-plate")
