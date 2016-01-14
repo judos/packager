@@ -1,2 +1,5 @@
+- smelt ores directly from boxes to boxes
+- decide yourself how to fill mixed boxes
+
 x Wood, Iron gears, Electronic circuit, copper-cable
  -> This is blocked due to raw ressources calculation of factorio (crafting recipes are screwed up then)
