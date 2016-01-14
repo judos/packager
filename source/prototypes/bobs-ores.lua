@@ -1,5 +1,14 @@
+data:extend(
+{
+	{
+    type = "item-subgroup",
+    name = "packaging_bobs",
+    group = "packaging",
+    order = "50",
+  },
+})
 
-setSubgroup("packaging_raw")
+setSubgroup("packaging_bobs")
 
 local ores = {
 	"bauxite-ore","cobalt-ore","gem-ore","gold-ore","lead-ore","nickel-ore","quartz",

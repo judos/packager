@@ -38,7 +38,7 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 			ingredients = {{ingredientName,stackSize},{chestName,1}},
 			result = recipeName.."-"..itemAppendix,
 			result_count = 1,
-			order = recipeName:sub(1,3).."1",
+			order = recipeName.."1",
 			enabled = "true"
 		},
 		{
@@ -53,7 +53,7 @@ function recipe_addBox(recipeName,ingredientName,containerTier)
 				{type="item", name=ingredientName, amount=stackSize},
 				{type="item", name=chestName, amount=1}
 			},
-			order = recipeName:sub(1,3).."2",
+			order = recipeName.."2",
 			enabled = "true"
 		},
 	})
@@ -80,8 +80,7 @@ function item_addBox(itemName,stackItemName,containerTier)
 			icon = "__packager__/graphics/icons/"..itemName.."-"..itemAppendix..".png",
 			flags = {"goes-to-main-inventory"},
 			subgroup = currentSubGroup,
-			--category = "crafting", --Unknown property, what does it do?
-			order = itemName:sub(1,3),
+			order = itemName,
 			stack_size = stackSize
 		},
 	})
