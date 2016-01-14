@@ -16,7 +16,10 @@ public class GenerateIcons {
 
 	public static String[] names = {"bauxite-ore", "cobalt-ore", "gem-ore", "gold-ore",
 		"lead-ore", "nickel-ore", "quartz", "rutile-ore", "silver-ore", "tin-ore",
-		"tungsten-ore", "zinc-ore"};
+		"tungsten-ore", "zinc-ore",
+		"aluminium-plate", "lead-plate", "tin-plate", "silver-plate", "glass", "resin", "rubber", 
+		"gold-plate", "cobalt-plate","tungsten-plate", "zinc-plate", "nickel-plate", "titanium-plate",
+		"bronze-plate", "brass-plate", "electrum-plate", "invar-plate"};
 
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating -pack -unpack png images...");
@@ -31,8 +34,8 @@ public class GenerateIcons {
 			ImageIO.write(packIcon, "PNG", new File("icons/" + item + "-box-pack.png"));
 
 			g = unpackIcon.createGraphics();
-			g.drawImage(pack, 0, 0, null);
-			ImageIO.write(packIcon, "PNG", new File("icons/" + item + "-box-unpack.png"));
+			g.drawImage(unpack, 0, 0, null);
+			ImageIO.write(unpackIcon, "PNG", new File("icons/" + item + "-box-unpack.png"));
 		}
 		System.out.println("done.");
 	}

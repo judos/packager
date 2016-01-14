@@ -1,19 +1,2 @@
-packager:
-- bobs integration:
-	- unsorted gemstone ore
-	- bauxite / aluminium plate
-  - galena / lead ore / lead plate
-	- tin ore / tin plate
-	- silver ore / silver plate
-	- quartz ore / glass
-	- resin / rubber
-	- gold ore / plate
-	- cobaltite, cobalt plate
-	- tungsten ore / tungsten plate
-	- zinc ore / zinc plate
-	- nickel ore / nickel plate
-	- rutile ore / titanium plate
-	- bronze plate, brass plate, electrum plate, invar plate
-
 x Wood, Iron gears, Electronic circuit, copper-cable
  -> This is blocked due to raw ressources calculation of factorio (crafting recipes are screwed up then)
