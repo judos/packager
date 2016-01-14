@@ -61,7 +61,7 @@ script.on_event(defines.events.on_tick, function(event)
 	end
 	for _,idEntity in pairs(global.schedule[game.tick]) do
 		entity = entityOfId(idEntity)
-		if entity.valid then
+		if entity and entity.valid then
 			local nextUpdateInXTicks, errorMessage = runPackagerInstructions(idEntity, entity)
 			if errorMessage ~= nil then
 				debug("Problem with packager at " .. entity.position.x .. ", " ..entity.position.y .. ": "..errorMessage)
@@ -213,7 +213,7 @@ function runPackagerInstructions(idOfEntity, entity)
 	-- for all belts found around the packager
 	for _,beltId in pairs(global.packagerInputBelts[idOfEntity]) do
 		local belt = entityOfId(beltId)
-		if not belt.valid then -- belt was removed
+		if (not belt) or (not belt.valid) then -- belt was removed
 			updateBeltSetup(entity)
 			return delayOff,"belt was removed"
 		end
