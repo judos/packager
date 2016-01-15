@@ -1,6 +1,8 @@
 # Packager
 Factorio Packager mod - pack your items for faster loading and bigger stack size
 
+See the forum thread for more infos: http://www.factorioforums.com/forum/viewtopic.php?f=93&t=17194
+
 Features:
 - Pack vanilla ores and plates into wooden boxes for faster loading/unloading
 - Packaging works on character, assembling machines and the new packager
