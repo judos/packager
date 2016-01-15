@@ -4,6 +4,7 @@
 - Moved containers to separate item-group
 - Added bobsores in boxes
 - Belt-packager has differnet graphics for better visibility
+- Fixed two crashes caused by belt-packager
 
 0.1.4
 
