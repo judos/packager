@@ -213,7 +213,7 @@ function runPackagerInstructions(idOfEntity, entity)
 	-- for all belts found around the packager
 	for _,beltId in pairs(global.packagerInputBelts[idOfEntity]) do
 		local belt = entityOfId(beltId)
-		if (not belt) or (not belt.valid) then -- belt was removed
+		if belt==nil or belt.valid==false or belt.type~="transport-belt" then -- belt was removed
 			updateBeltSetup(entity)
 			return delayOff,"belt was removed"
 		end
