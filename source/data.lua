@@ -11,3 +11,5 @@ require("recipe-machines")
 require("recipe")
 require("recipe-others")
 
+require("prototypes.configurable-boxes")
+require("prototypes.configurable-packager")
