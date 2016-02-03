@@ -1,5 +1,6 @@
 require "defines"
 require "basic-lua-extensions"
+require "control.configurable-packager"
 
 local delayOff = 60 -- when the packager doesn't run the next update is triggered X ticks later
 local regularUpdate = 5 -- when the packager is running
@@ -33,7 +34,7 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
-	debug("onload"..serpent.block(global))
+	info("onload"..serpent.block(global))
 	if not global.packagerVersion then
 		global.packagerVersion = "0.1.4"
 		global.packagerInputBelts = {}
@@ -41,11 +42,11 @@ function onLoad()
 		PlayerPrint("Migration: All old belt-packagers have to be replaced due to code changes.")
 	end
 	if not global.packagerInputBelts then
-		debug("initialized global.packagerInputBelts")
+		info("initialized global.packagerInputBelts")
 		global.packagerInputBelts = {}
 	end
 	if not global.schedule then
-		debug("initialized global.schedule")
+		info("initialized global.schedule")
 		global.schedule = {}
 	end
 end
@@ -64,7 +65,7 @@ script.on_event(defines.events.on_tick, function(event)
 		if entity and entity.valid then
 			local nextUpdateInXTicks, errorMessage = runPackagerInstructions(idEntity, entity)
 			if errorMessage ~= nil then
-				debug("Problem with packager at " .. entity.position.x .. ", " ..entity.position.y .. ": "..errorMessage)
+				info("Problem with packager at " .. entity.position.x .. ", " ..entity.position.y .. ": "..errorMessage)
 			end
 			if nextUpdateInXTicks ~= nil then
 				scheduleAdd(entity, game.tick + nextUpdateInXTicks)
@@ -73,7 +74,7 @@ script.on_event(defines.events.on_tick, function(event)
 				removePackager(idEntity)
 			end
 		else
-			debug("packager is not valid!")
+			warn("packager is not valid!")
 			-- if entity was removed, remove it from memory
 			removePackager(idEntity)
 		end
@@ -82,21 +83,25 @@ script.on_event(defines.events.on_tick, function(event)
 end)
 
 ---------------------------------------------------
--- Building packagers
+-- Building Entities
 ---------------------------------------------------
 script.on_event(defines.events.on_built_entity, function(event)
-	if event.created_entity.name == packagerName then
-		packagerBuilt(event.created_entity)
-	end
+	entityBuilt(event)
 end)
 script.on_event(defines.events.on_robot_built_entity, function(event)
-	if event.created_entity.name == packagerName then
-		packagerBuilt(event.created_entity)
-	end
+	entityBuilt(event)
 end)
 
+function entityBuilt(event)
+	if event.created_entity.name == packagerName then
+		packagerBuilt(event.created_entity)
+	elseif event.created_entity.name == "configurable-packager" then
+		builtConfigurablePackager(event.created_entity)
+	end
+end
+
 function packagerBuilt(entity)
-	debug("packager built and added for update tick: "..game.tick)
+	info("packager built and added for update tick: "..game.tick)
 	updateBeltSetup(entity)
 	scheduleAdd(entity, game.tick + 10)
 end
@@ -107,27 +112,14 @@ function updateBeltSetup(entity)
 end
 
 ---------------------------------------------------
--- Removal of packagers
+-- Removal of Entities
 ---------------------------------------------------
--- triggered in tick() because no coordinate is passed for the following functions)
---[[
-script.on_event(defines.events.on_player_mined_item, function(event)
-	if event.item_stack.name == packagerName then
-	end
-end)
-script.on_event(defines.events.on_robot_mined, function(event)
-	if event.item_stack.name == packagerName then
-	end
-end)
-script.on_event(defines.events.on_entity_died, function(event)
-	if event.item_stack.name == packagerName then
-	end
-end)
-]]--
+-- triggered in tick() because no coordinate is passed for the following events:
+-- on_player_mined_item, on_robot_mined, on_entity_died
+
 function removePackager(idOfEntity)
 	global.packagerInputBelts[idOfEntity] = nil
 end
-
 
 ---------------------------------------------------
 -- Utility methods

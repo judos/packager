@@ -48,4 +48,32 @@ local configurablePackager = deepcopy(data.raw["furnace"]["electric-furnace"])
 configurablePackager.name = "configurable-packager"
 configurablePackager.minable.result = "configurable-packager"
 configurablePackager.crafting_categories = {"packager-configurable"}
+configurablePackager.collision_box = {{-0.9, -0.9}, {0.9, 0.9}}
+configurablePackager.selection_box = {{-0.9, -0.4}, {0.9, 0.4}}
+configurablePackager.animation = {
+	filename = "__packager__/graphics/entity/belt-packager/belt-packager.png",
+	priority = "high",
+	width = 75,
+	height = 66,
+	frame_count = 32,
+	line_length = 8,
+	shift = {0.25, -0.08}
+}
 data:extend({	configurablePackager })
+
+-- Item feeder
+local itemFeeder = deepcopy(data.raw["container"]["iron-chest"])
+itemFeeder.name = "configurable-packager-item-feeder"
+itemFeeder.flags = {"placeable-off-grid","not-repairable"}
+itemFeeder.collision_box = nil
+itemFeeder.inventory_size = 1
+itemFeeder.order = "z"
+itemFeeder.selection_box = {{-0.45, -0.25}, {0.45, 0.25}}
+itemFeeder.picture = {
+		filename = "__packager__/graphics/entity/test.png",
+		priority = "low", --"extra-high",
+		width = 0, --29,
+		height = 0, --16,
+		shift = {0, 0}
+}
+data:extend({	itemFeeder })

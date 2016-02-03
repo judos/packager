@@ -28,14 +28,26 @@ end
 
 -- DyTech source codes:
 --[[Debug Functions]]--
-debug_master = false -- Master switch for debugging, shows most things!
+debug_master = true -- Master switch for debugging, shows most things!
+debug_level = 2 -- 1=info 2=warning 3=error
 
-function debug(message)
+function info(message)
+	if debug_level<=1 then debug(message,"INFO") end
+end
+function warn(message)
+	if debug_level<=2 then debug(message,"WARN") end
+end
+function error(message)
+	if debug_level<=3 then debug(message,"ERROR") end
+end
+
+function debug(message,level)
+	if not level then level="ANY" end
 	if debug_master then
 		if type(message) ~= "string" then
 			message = serpent.block(message)
 		end
-		print(message)
+		print(level..": "..message)
 	end
 end
 
