@@ -1,6 +1,6 @@
 {
   "name": "packager",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "title": "Packager",
   "author": "judos",
   "description": "Adds boxes of materials, this allows faster loading and unloading at the cost of more crafting.\nStack sizes are adapted if other mods (e.g. DyTech)) are installed.",

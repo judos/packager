@@ -29,7 +29,7 @@ end
 -- DyTech source codes:
 --[[Debug Functions]]--
 debug_master = true -- Master switch for debugging, shows most things!
-debug_level = 2 -- 1=info 2=warning 3=error
+debug_level = 1 -- 1=info 2=warning 3=error
 
 function info(message)
 	if debug_level<=1 then debug(message,"INFO") end
