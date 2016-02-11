@@ -18,3 +18,5 @@ end
 remote.add_interface("packager", {
   start
 })
+
+-- /c game.local_player.insert{name="basic-inserter",count=50}

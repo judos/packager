@@ -91,15 +91,19 @@ end)
 function entityBuilt(event)
 	local entity = event.created_entity
 	local knownEntities = table.set({"belt-packager", "configurable-packager"})
-	if knownEntities[entity.name] then
-		global.entityData[idOfEntity(entity)] = { ["name"] = entity.name }
+	info(knownEntities)
+	if not knownEntities[entity.name] then
+		return
 	end
 	
+	global.entityData[idOfEntity(entity)] = { ["name"] = entity.name }
+	local addedData = {}
 	if entity.name == "belt-packager" then
-		builtBeltPackager(event.created_entity)
+		builtBeltPackager(entity)
 	elseif entity.name == "configurable-packager" then
-		builtConfigurablePackager(event.created_entity)
+		addedData = builtConfigurablePackager(entity)
 	end
+	table.addTable(global.entityData[idOfEntity(entity)],addedData)
 end
 
 ---------------------------------------------------

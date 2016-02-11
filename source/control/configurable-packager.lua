@@ -14,6 +14,7 @@ function builtConfigurablePackager(entity)
 	end
 	
 	scheduleAdd(entity, game.tick + 1)
+	return {["feeders"] = feederChests}
 end
 
 
@@ -25,10 +26,42 @@ end
 
 
 function preMineConfigurablePackager(event)
+-- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
+	local entity = event.entity
 	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
-	-- TODO
-	-- if playerIndex is set in events table, every item must be moved in this method from the feeder chests to the packager, otherwise items get lost
+	local entityInv = entity.get_inventory(3)
+	local data = global.entityData[idOfEntity(entity)]
 	
+	-- Move items from feeder into Output slots (player or bots pick them up)
+	for _,feeder in pairs(data["feeders"]) do
+		local feederInv = feeder.get_inventory(defines.inventory.chest)
+		if not feederInv.is_empty() then
+			if entityInv.can_insert(feederInv[1]) then
+				local insertedAmount = entityInv.insert(feederInv[1])
+				feederInv.remove({name=feederInv[1].name,count=insertedAmount})
+			else
+				break
+			end
+		end
+	end
 	
+	-- since the player mines it all items have to be moved
+	if event.player_index then
+		-- if playerIndex is set in events table, every item must be moved in this method from the feeder chests to the packager, otherwise items get lost
+		local p = game.players[event.player_index]
+		for _,feeder in pairs(data["feeders"]) do
+			local feederInv = feeder.get_inventory(defines.inventory.chest)
+			if not feederInv.is_empty() then
+				local insertedAmount= p.insert(feederInv[1])
+				if insertedAmount>0 then
+					feederInv.remove({name=feederInv[1].name,count=insertedAmount})
+				end
+			end
+		end
+	end
 	
+	for _,feeder in pairs(data["feeders"]) do
+		--TODO: unsafe if items can't be inserted into players inventory
+		feeder.destroy()
+	end
 end

@@ -1,3 +1,7 @@
+function table.addTable(t,toAdd)
+	for k,v in pairs(toAdd) do t[k] = v end
+end
+
 function table.set(t) -- set of list
   local u = { }
   for _, v in ipairs(t) do u[v] = true end
