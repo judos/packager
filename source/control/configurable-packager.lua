@@ -13,7 +13,7 @@ function builtConfigurablePackager(entity)
 		table.insert(feederChests,chest)
 	end
 	
-	scheduleAdd(entity, game.tick + 1)
+	scheduleAdd(entity, game.tick + 60)
 	return {["feeders"] = feederChests}
 end
 
@@ -21,7 +21,7 @@ end
 function tickConfigurablePackager(entity)
 	entity.energy = entity.energy-903
 
-	return 1,nil
+	return 60,nil
 end
 
 

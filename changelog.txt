@@ -1,3 +1,11 @@
+0.3.0
+
+- added Configurable-packager
+
+0.2.1
+
+- fixed crash when belt is removed near belt-packager
+
 0.2.0
 
 - Added bobplates in boxes
