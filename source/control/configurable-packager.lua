@@ -56,12 +56,18 @@ function preMineConfigurablePackager(event)
 				if insertedAmount>0 then
 					feederInv.remove({name=feederInv[1].name,count=insertedAmount})
 				end
+				if not feederInv.is_empty() then
+					entity.surface.spill_item_stack(entity.position,feederInv[1])
+					feederInv.clear()
+				end
 			end
 		end
 	end
-	
+end
+
+function removeConfigurablePackager(idEntity)
+	local data = global.entityData[idEntity]
 	for _,feeder in pairs(data["feeders"]) do
-		--TODO: unsafe if items can't be inserted into players inventory
 		feeder.destroy()
 	end
 end

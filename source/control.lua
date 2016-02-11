@@ -64,6 +64,9 @@ script.on_event(defines.events.on_tick, function(event)
 			end
 		else
 			warn(name.." is not valid anymore")
+			if name == "configurable-packager" then
+				removeConfigurablePackager(idEntity)
+			end
 			nextUpdateInXTicks = nil
 		end
 		
