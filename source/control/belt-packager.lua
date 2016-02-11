@@ -1,14 +1,12 @@
 local packagerDelayOff = 60 -- when the packager doesn't run the next update is triggered X ticks later
 local packagerRegularUpdate = 5 -- when the packager is running
 
-
-function packagerInit()
-	if not global.packagerInputBelts then
-		info("initialized global.packagerInputBelts")
-		global.packagerInputBelts = {}
-	end
-end
-
+require "defines"
+local north = defines.direction.north
+local east = defines.direction.east
+local south = defines.direction.south
+local west = defines.direction.west
+local transport_line = defines.transport_line
 
 function builtBeltPackager(entity)
 	info("packager built and added for update tick: "..game.tick)
@@ -18,12 +16,7 @@ end
 
 function updateBeltSetup(entity)
 	local beltEntityIds = findInputBeltIds(entity)
-	global.packagerInputBelts[idOfEntity(entity)] = beltEntityIds
-end
-
-
-function removePackager(idOfEntity)
-	global.packagerInputBelts[idOfEntity] = nil
+	global.entityData[idOfEntity(entity)]["belts"] = beltEntityIds
 end
 
 
@@ -47,16 +40,16 @@ function runPackagerInstructions(idOfEntity, entity)
 	-- -> see this report: http://www.factorioforums.com/forum/viewtopic.php?f=7&t=17347&p=114954#p114954
 	--	return packagerDelayOff,"no storage space"
 	-- end
-	
+
 	-- no input belts
-	if #global.packagerInputBelts[idOfEntity] == 0 then
+	if #global.entityData[idOfEntity]["belts"] == 0 then
 		updateBeltSetup(entity)
 		return packagerDelayOff,nil --"no input belts"
 	end
 	local actions = 0
 	
 	-- for all belts found around the packager
-	for _,beltId in pairs(global.packagerInputBelts[idOfEntity]) do
+	for _,beltId in pairs(global.entityData[idOfEntity]["belts"]) do
 		local belt = entityOfId(beltId)
 		if belt==nil or belt.valid==false or belt.type~="transport-belt" then -- belt was removed
 			updateBeltSetup(entity)

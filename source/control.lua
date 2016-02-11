@@ -3,17 +3,14 @@ require "basic-lua-extensions"
 require "control.configurable-packager"
 require "control.belt-packager"
 require "control.migration-0-3-0"
+require "control.remote-calls"
 
-local north = defines.direction.north
-local east = defines.direction.east
-local south = defines.direction.south
-local west = defines.direction.west
-local transport_line = defines.transport_line
 
 -- global data stored and used:
 -- global.packagerInputBelts[idEntity] = { idEntity(belt), ... }
 -- global.schedule[tick][idEntity] = $ENTITY$
 -- global.entityData[idEntity] = { name="NAME" }
+--																 belts={ idEntity(belt), ...} -- beltPackager
 
 ---------------------------------------------------
 -- Loading
@@ -26,8 +23,8 @@ script.on_load(function()
 end)
 
 function onLoad()
-	if global.packagerVersion < "0.3.0" then	migration_0_3_0() end
 	if not global.packagerVersion then global.packagerVersion = "0.3.0" end
+	if global.packagerVersion < "0.3.0" then	migration_0_3_0() end
 	
 	if not global.schedule then
 		info "initialized global.schedule"
@@ -37,7 +34,6 @@ function onLoad()
 		info "initialized entity table"
 		global.entityData = {}
 	end
-	packagerInit()
 	
 	info("onload"..serpent.block(global))
 end
@@ -53,7 +49,7 @@ script.on_event(defines.events.on_tick, function(event)
 	
 	local nextUpdateInXTicks, errorMessage
 	for idEntity,entity in pairs(global.schedule[game.tick]) do
-		local name = global.entityData[idEntity]
+		local name = global.entityData[idEntity].name
 		if not name then name = "UNKNOWN" end
 		info("updating "..name.." with id: "..idEntity)
 		if entity and entity.valid then
@@ -76,9 +72,7 @@ script.on_event(defines.events.on_tick, function(event)
 			scheduleAdd(entity, game.tick + nextUpdateInXTicks)
 		else
 			-- if no more update is scheduled, remove it from memory
-			if name == "belt-packager" then
-				removePackager(idEntity)
-			end
+			global.entityData[idEntity]=nil
 		end
 	end
 	global.schedule[game.tick] = nil
@@ -96,7 +90,10 @@ end)
 
 function entityBuilt(event)
 	local entity = event.created_entity
-	global.entityData[idOfEntity(entity)] = entity.name
+	local knownEntities = table.set({"belt-packager", "configurable-packager"})
+	if knownEntities[entity.name] then
+		global.entityData[idOfEntity(entity)] = { ["name"] = entity.name }
+	end
 	
 	if entity.name == "belt-packager" then
 		builtBeltPackager(event.created_entity)
