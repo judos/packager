@@ -4,13 +4,22 @@ require "control.configurable-packager"
 require "control.belt-packager"
 require "control.migration-0-3-0"
 require "control.remote-calls"
-
+require "control.packager-library"
 
 -- global data stored and used:
--- global.packagerInputBelts[idEntity] = { idEntity(belt), ... }
 -- global.schedule[tick][idEntity] = $ENTITY$
 -- global.entityData[idEntity] = { name="NAME" }
 --																 belts={ idEntity(belt), ...} -- beltPackager
+-- global.recipes[ nr{1,1000000} ] = {item=count, item2=count2, ...}
+--								 the asosciated health float value is: nr/1000000
+--								 as reference I used: http://stackoverflow.com/questions/3310276/decimal-precision-of-floats
+intToFloatDivider = 100 --TODO: for testing
+-- intToFloatDivider = 1000000
+
+
+script.on_event(defines.events.on_gui_click, function(event)
+	print(event)
+end)
 
 ---------------------------------------------------
 -- Loading
@@ -34,6 +43,10 @@ function onLoad()
 		info "initialized entity table"
 		global.entityData = {}
 	end
+	if not global.recipes then
+		info "initialized recipe table"
+		global.recipes = {}
+	end
 	
 	info("onload"..serpent.block(global))
 end
@@ -51,12 +64,14 @@ script.on_event(defines.events.on_tick, function(event)
 	for idEntity,entity in pairs(global.schedule[game.tick]) do
 		local name = global.entityData[idEntity].name
 		if not name then name = "UNKNOWN" end
-		info("updating "..name.." with id: "..idEntity)
+		--info("updating "..name.." with id: "..idEntity)
 		if entity and entity.valid then
 			if name == "belt-packager" then
 				nextUpdateInXTicks, errorMessage = runPackagerInstructions(idEntity, entity)
 			elseif name == "configurable-packager" then
 				nextUpdateInXTicks, errorMessage = tickConfigurablePackager(entity)
+			elseif name == "packager-library" then
+				nextUpdateInXTicks, errorMessage = tickPackagerLibrary(entity)
 			end
 			
 			if errorMessage ~= nil then
@@ -70,7 +85,7 @@ script.on_event(defines.events.on_tick, function(event)
 			nextUpdateInXTicks = nil
 		end
 		
-		info("scheduled update in ticks: "..tostring(nextUpdateInXTicks))
+		--info("scheduled update in ticks: "..tostring(nextUpdateInXTicks))
 		if nextUpdateInXTicks ~= nil then
 			scheduleAdd(entity, game.tick + nextUpdateInXTicks)
 		else
@@ -93,7 +108,7 @@ end)
 
 function entityBuilt(event)
 	local entity = event.created_entity
-	local knownEntities = table.set({"belt-packager", "configurable-packager"})
+	local knownEntities = table.set({"belt-packager", "configurable-packager","packager-library"})
 	info(knownEntities)
 	if not knownEntities[entity.name] then
 		return
@@ -105,6 +120,8 @@ function entityBuilt(event)
 		builtBeltPackager(entity)
 	elseif entity.name == "configurable-packager" then
 		addedData = builtConfigurablePackager(entity)
+	elseif entity.name == "packager-library" then
+		builtPackagerLibrary(entity)
 	end
 	table.addTable(global.entityData[idOfEntity(entity)],addedData)
 end
