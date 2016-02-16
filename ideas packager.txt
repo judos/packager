@@ -1,20 +1,22 @@
 IN PROGRESS:
 
 Concept for configurable boxes:
-! blueprint library (is basically a chest with some control)
+
 ! control table references active amount of chests per configuration
-+ 2 recipes for configurable-packager (allows boxes to be in input slot)
++ 2 recipes for configurable-packager (allows empty boxes and filled ones to be in input slot)
   recipes need 2000 input items, more than stack-size, so will never be completed
-+ 1 recipe for configurable-packager to configure packaging blueprint
 + item feeders work similar to slipStreamChest, spawn 2x2 on packager
 - item feeders mode is set by packager
 
+? Can packager accept recipe as module?
+? 1 recipe for configurable-packager to configure packaging blueprint
+
+
 DONE:
 - item feeders have no image, 1 stack inventory, not minable or destroyable, despawn with packager
-
+! blueprint library (is basically a chest with some control)
 
 FURTHER IDEAS:
-- decide yourself how to fill mixed boxes
 - smelt ores directly from boxes to boxes
 
 x Wood, Iron gears, Electronic circuit, copper-cable
