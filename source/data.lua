@@ -12,4 +12,4 @@ require "recipe"
 require "recipe-others"
 
 require "prototypes.configurable-boxes"
-require "prototypes.configurable-packager"
+require "prototypes.configurable-packager"require "prototypes.packager-recipe"
