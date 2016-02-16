@@ -1,5 +1,6 @@
 function migration_0_3_0()
 	-- remove old data
+	-- global.packagerInputBelts[idEntity] = { idEntity(belt), ... }
 	global.packagerInputBelts=nil
 
 	-- migrate data to new variables
@@ -9,7 +10,7 @@ function migration_0_3_0()
 		if not newSchedule[tick] then newSchedule[tick] = {} end
 		for _,idEntity in pairs(array) do
 			newSchedule[tick][idEntity] = entityOfId(idEntity)
-			global.entityData[idEntity] = entityOfId(idEntity).name
+			global.entityData[idEntity] = {name = entityOfId(idEntity).name}
 		end
 	end
 	global.schedule = newSchedule
