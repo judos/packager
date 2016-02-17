@@ -30,14 +30,16 @@ data:extend(
 	},
 	{
     type = "recipe",
-    name = "gold-packaging",
+    name = "configurable-packaging-template",
 		category = "packager-configurable",
+		--category = "smelting",
 		subgroup = "packaging_machines",
     energy_required = 1,
-    ingredients = {{"wooden-chest",2000}},
-    results = {
-			{ type="item", name="configurable-box", amount=1 }
-		},
+    ingredients = {{"wooden-chest",2}},
+		result = "iron-plate",
+    --results = {
+		--	{ type="item", name="configurable-box", amount=1 }
+		--},
 		order = "0",
 		enabled = "true",
   },

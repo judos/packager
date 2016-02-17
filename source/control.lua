@@ -119,7 +119,7 @@ function entityBuilt(event)
 	if entity.name == "belt-packager" then
 		builtBeltPackager(entity)
 	elseif entity.name == "configurable-packager" then
-		addedData = builtConfigurablePackager(entity)
+		addedData,entity = builtConfigurablePackager(entity)
 	elseif entity.name == "packager-library" then
 		builtPackagerLibrary(entity)
 	end

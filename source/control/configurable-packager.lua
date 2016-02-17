@@ -13,13 +13,19 @@ function builtConfigurablePackager(entity)
 		table.insert(feederChests,chest)
 	end
 	
-	scheduleAdd(entity, game.tick + 60)
-	return {["feeders"] = feederChests}
+	local entity2 = entity.surface.create_entity({
+		name="configurable-packager",
+		force= entity.force,
+		position=entity.position
+	})
+	entity.destroy()
+	
+	scheduleAdd(entity2, game.tick + 60)
+	return {["feeders"] = feederChests},entity2
 end
 
 
 function tickConfigurablePackager(entity)
-	entity.energy = entity.energy-903
 
 	return 60,nil
 end
