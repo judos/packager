@@ -11,13 +11,14 @@ data:extend({
 		subgroup = "packaging_machines"
 	},
 	{
-		type = "item",
+		type = "module",
 		name = "packager-recipe",
 		order = "packager-recipe",
 		icon = "__packager__/graphics/icons/recipe.png",
 		flags = {"goes-to-main-inventory"},
 		stack_size = 10,
-		subgroup = "packaging_machines"
+		subgroup = "packaging_machines",
+		effect = {}
 	}
 })
 

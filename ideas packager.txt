@@ -8,13 +8,11 @@ Concept for configurable boxes:
 + item feeders work similar to slipStreamChest, spawn 2x2 on packager
 - item feeders mode is set by packager
 
-? Can packager accept recipe as module?
-? 1 recipe for configurable-packager to configure packaging blueprint
-
-
 DONE:
-- item feeders have no image, 1 stack inventory, not minable or destroyable, despawn with packager
-! blueprint library (is basically a chest with some control)
++ Can packager accept recipe as module?
+X 1 recipe for configurable-packager to configure packaging blueprint
++ item feeders have no image, 1 stack inventory, not minable or destroyable, despawn with packager
++ blueprint library (is basically a chest with some control)
 
 FURTHER IDEAS:
 - smelt ores directly from boxes to boxes

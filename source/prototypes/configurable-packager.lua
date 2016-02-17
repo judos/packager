@@ -48,7 +48,7 @@ local configurablePackager = deepcopy(data.raw["furnace"]["electric-furnace"])
 configurablePackager.name = "configurable-packager"
 configurablePackager.minable.result = "configurable-packager"
 configurablePackager.crafting_categories = {"packager-configurable"}
-configurablePackager.energy_source.drain = "1kW"
+configurablePackager.energy_source.drain = "100kW"
 configurablePackager.energy_usage = "100kW"
 configurablePackager.collision_box = {{-0.9, -0.9}, {0.9, 0.9}}
 configurablePackager.selection_box = {{-0.9, -0.4}, {0.9, 0.4}}
@@ -61,6 +61,7 @@ configurablePackager.animation = {
 	line_length = 8,
 	shift = {0.25, -0.08}
 }
+configurablePackager.module_specification.module_slots = 1
 data:extend({	configurablePackager })
 
 -- Item feeder
