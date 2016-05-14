@@ -32,7 +32,7 @@ end
 
 
 function preMineConfigurablePackager(event)
--- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
+	-- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
 	local entity = event.entity
 	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
 	local entityInv = entity.get_inventory(3)

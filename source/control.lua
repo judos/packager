@@ -48,7 +48,7 @@ function onLoad()
 		global.recipes = {}
 	end
 	
-	info("onload"..serpent.block(global))
+	info("packager onload:"..serpent.block(global))
 end
 
 ---------------------------------------------------
@@ -109,7 +109,6 @@ end)
 function entityBuilt(event)
 	local entity = event.created_entity
 	local knownEntities = table.set({"belt-packager", "configurable-packager","packager-library"})
-	info(knownEntities)
 	if not knownEntities[entity.name] then
 		return
 	end
